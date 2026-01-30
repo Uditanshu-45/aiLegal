@@ -33,3 +33,51 @@ export const INDIAN_CONTRACT_ACT_URL = 'https://www.indiacode.nic.in/bitstream/1
  * Disclaimer text
  */
 export const DISCLAIMER = 'This analysis is for educational purposes only. It does not constitute legal advice. Consult a qualified lawyer before signing any contract.';
+
+/**
+ * Impact profiles for founder-friendly output
+ * Maps clause types to affected roles and business risk categories
+ */
+export const IMPACT_PROFILES: Record<string, { appliesTo: string[]; businessRisk: string }> = {
+    non_compete_section27: {
+        appliesTo: ['Freelancers', 'Agencies', 'Startups'],
+        businessRisk: 'Investor Red Flag'
+    },
+    unlawful_object_section23: {
+        appliesTo: ['Freelancers', 'Agencies', 'Startups', 'Enterprises'],
+        businessRisk: 'Contract Void'
+    },
+    unlimited_liability_section73: {
+        appliesTo: ['Freelancers', 'Startups'],
+        businessRisk: 'Financial Risk'
+    },
+    excessive_penalty_section74: {
+        appliesTo: ['Freelancers', 'Agencies'],
+        businessRisk: 'Financial Risk'
+    },
+    unilateral_termination: {
+        appliesTo: ['Freelancers', 'Agencies'],
+        businessRisk: 'Job Security Risk'
+    },
+    unfair_payment_terms: {
+        appliesTo: ['Freelancers', 'Agencies', 'Startups'],
+        businessRisk: 'Cash Flow Risk'
+    },
+    foreign_jurisdiction: {
+        appliesTo: ['Freelancers', 'Startups'],
+        businessRisk: 'Legal Cost Risk'
+    },
+    blanket_ip_transfer: {
+        appliesTo: ['Freelancers', 'Agencies'],
+        businessRisk: 'IP Ownership Risk'
+    },
+    vague_scope: {
+        appliesTo: ['Freelancers', 'Agencies'],
+        businessRisk: 'Scope Creep Risk'
+    },
+    undue_influence_section16: {
+        appliesTo: ['Freelancers', 'Startups'],
+        businessRisk: 'Coercion Risk'
+    }
+};
+

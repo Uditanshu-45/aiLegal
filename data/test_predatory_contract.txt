@@ -1,0 +1,34 @@
+FREELANCE SERVICE AGREEMENT
+
+This Service Agreement ("Agreement") is entered into between Client Corp ("Client") and Contractor ("Freelancer").
+
+1. NON-COMPETE CLAUSE
+The Contractor shall not compete with Client or engage in any similar business activities for a period of 2 years after termination of this agreement. Contractor agrees not to work for any competitor of Client during and after this engagement. This restraint of trade provision is essential to protect Client's interests.
+
+2. INTELLECTUAL PROPERTY
+All intellectual property, work product, inventions, developments, and any materials created by Contractor shall belong exclusively to Client in perpetuity. Contractor hereby assigns all IP rights including moral rights to Client. This includes any pre-existing work incorporated into deliverables.
+
+3. LIABILITY AND INDEMNIFICATION
+Contractor assumes unlimited liability for all damages arising from this agreement, including consequential damages, indirect damages, and loss of profits. Contractor shall indemnify Client against all claims without limitation.
+
+4. PAYMENT TERMS
+Payment shall be made within 120 days of invoice submission, subject to Client receiving payment from its end customers. Client may withhold payment for any reason at its sole discretion.
+
+5. TERMINATION
+Client may terminate this agreement immediately without cause or notice at any time at its sole discretion. Contractor cannot terminate and must continue providing services until Client terminates.
+
+6. JURISDICTION AND GOVERNING LAW
+This agreement shall be governed by the laws of Delaware, USA. All disputes shall be resolved in the courts of California, United States of America. Indian courts shall have no jurisdiction.
+
+7. SCOPE OF WORK
+Contractor shall perform services as required by Client from time to time. Additional work may be assigned at Client's discretion without additional compensation. Contractor must be available 24/7.
+
+8. PENALTY CLAUSE
+In case of any breach by Contractor, Contractor shall pay a penalty equal to 10x the contract value as liquidated damages. This penalty is in addition to any other damages.
+
+SIGNATURES:
+_____________________
+Client Representative
+
+_____________________
+Contractor

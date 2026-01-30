@@ -5,7 +5,7 @@ import { validateAgainstIndianLaw } from '@/lib/services/indianLawValidator.serv
 import { checkDeviationsFromFairContract } from '@/lib/services/deviationChecker.service';
 import { calculateRiskScore, getRiskLevel } from '@/lib/services/scorer.service';
 import { explainClause } from '@/lib/services/explainer.service';
-import { ALLOWED_FILE_TYPES, MAX_FILE_SIZE, DISCLAIMER } from '@/lib/utils/constants';
+import { ALLOWED_FILE_TYPES, MAX_FILE_SIZE, DISCLAIMER, IMPACT_PROFILES } from '@/lib/utils/constants';
 
 export async function POST(request: NextRequest) {
     const startTime = Date.now();
@@ -93,6 +93,8 @@ export async function POST(request: NextRequest) {
 
                 const endIndex = startIndex >= 0 ? startIndex + violation.clauseText.length : startIndex + 100;
 
+                const profile = IMPACT_PROFILES[violation.violationType];
+
                 return {
                     id: index + 1,
                     clauseNumber: violation.clauseId,
@@ -102,6 +104,8 @@ export async function POST(request: NextRequest) {
                     riskScore: violation.riskScore,
                     startIndex: Math.max(0, startIndex),
                     endIndex: Math.min(text.length, endIndex),
+                    appliesTo: profile?.appliesTo || ['All'],
+                    businessRisk: profile?.businessRisk || 'Contract Risk',
                     indianLawReference: {
                         section: violation.sectionNumber,
                         title: violation.sectionTitle,

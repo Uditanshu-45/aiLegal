@@ -1,11 +1,24 @@
 import { db } from './client';
 import { loadIndianContractActPDF } from './actLoader';
 
+// Required sections referenced by clause patterns
+const requiredSections = [
+    { number: 'Section 10', title: 'What agreements are contracts', summary: 'All agreements are contracts if they are made by the free consent of parties competent to contract, for a lawful consideration and with a lawful object, and are not hereby expressly declared to be void.' },
+    { number: 'Section 16', title: 'Undue influence defined', summary: 'A contract is said to be induced by undue influence where the relations subsisting between the parties are such that one of the parties is in a position to dominate the will of the other.' },
+    { number: 'Section 23', title: 'What considerations and objects are lawful', summary: 'The consideration or object of an agreement is lawful, unless it is forbidden by law, or is of such nature that if permitted would defeat provisions of any law, or is fraudulent, or involves injury to person or property, or is immoral or opposed to public policy.' },
+    { number: 'Section 27', title: 'Agreement in restraint of trade void', summary: 'Every agreement by which anyone is restrained from exercising a lawful profession, trade or business of any kind, is to that extent void.' },
+    { number: 'Section 73', title: 'Compensation for loss or damage caused by breach of contract', summary: 'When a contract has been broken, the party who suffers by such breach is entitled to receive, from the party who has broken the contract, compensation for any loss or damage caused to him thereby.' },
+    { number: 'Section 74', title: 'Compensation for breach of contract where penalty stipulated for', summary: 'When a contract has been broken, if a sum is named in the contract as the amount to be paid in case of such breach, the party complaining of the breach is entitled to receive from the party who has broken the contract reasonable compensation not exceeding the amount so named.' }
+];
+
 export async function seedDatabase() {
     console.log('🌱 Seeding database...');
 
     // 1. Load full Indian Contract Act PDF
     await loadIndianContractActPDF();
+
+    // 1.5. Ensure required sections exist for foreign key constraints
+    seedRequiredSections();
 
     // 2. Seed clause patterns (most common violations)
     seedClausePatterns();
@@ -17,6 +30,25 @@ export async function seedDatabase() {
     seedExplanationTemplates();
 
     console.log('✅ Database seeded successfully');
+}
+
+function seedRequiredSections() {
+    const insert = db.prepare(`
+        INSERT OR IGNORE INTO act_sections
+        (section_number, section_title, full_text, summary, page_number, chapter)
+        VALUES (?, ?, ?, ?, NULL, NULL)
+    `);
+
+    for (const section of requiredSections) {
+        insert.run(
+            section.number,
+            section.title,
+            section.summary,
+            section.summary
+        );
+    }
+
+    console.log(`✅ Ensured ${requiredSections.length} required sections exist`);
 }
 
 function seedClausePatterns() {
