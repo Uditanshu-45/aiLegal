@@ -6,21 +6,37 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "next lint",
+    "seed": "tsx lib/db/seed.ts",
+    "check-db": "tsx -e \"import { getDatabaseStats } from './lib/db/queries'; console.log(getDatabaseStats());\""
   },
   "dependencies": {
-    "next": "16.1.6",
-    "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "@google/generative-ai": "^0.21.0",
+    "@tailwindcss/postcss": "^4.1.18",
+    "better-sqlite3": "^12.6.2",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.468.0",
+    "mammoth": "^1.8.0",
+    "next": "^15.5.11",
+    "pdf-parse": "^1.1.1",
+    "postcss": "^8.5.6",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "recharts": "^2.15.0",
+    "sql.js": "^1.13.0",
+    "tailwindcss": "^4.1.18",
+    "tesseract.js": "^5.1.1"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
+    "@types/better-sqlite3": "^7.6.12",
+    "@types/node": "^22",
+    "@types/pdf-parse": "^1.1.4",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.1.6",
-    "tailwindcss": "^4",
+    "eslint-config-next": "15.1.4",
+    "tsx": "^4.19.2",
     "typescript": "^5"
   }
 }

@@ -1,0 +1,298 @@
+import { db } from './client';
+import { loadIndianContractActPDF } from './actLoader';
+
+export async function seedDatabase() {
+    console.log('🌱 Seeding database...');
+
+    // 1. Load full Indian Contract Act PDF
+    await loadIndianContractActPDF();
+
+    // 2. Seed clause patterns (most common violations)
+    seedClausePatterns();
+
+    // 3. Seed fair contract baseline
+    seedFairContractBaseline();
+
+    // 4. Seed explanation templates
+    seedExplanationTemplates();
+
+    console.log('✅ Database seeded successfully');
+}
+
+function seedClausePatterns() {
+    const patterns = [
+        // ===== CRITICAL RISK =====
+        {
+            clause_type: 'non_compete_section27',
+            keywords: JSON.stringify([
+                'non-compete', 'non compete', 'shall not compete', 'restraint of trade',
+                'not engage in similar business', 'cannot work for competitor',
+                'restricted from providing services', 'shall not solicit',
+                'covenant not to compete', 'agree not to work'
+            ]),
+            risk_level: 'CRITICAL',
+            risk_score: 40,
+            linked_section: 'Section 27',
+            description: 'Non-compete clause restricting freelancer from taking other work',
+            example_violation: '"The Contractor agrees not to engage in any competing business for 2 years"'
+        },
+        {
+            clause_type: 'unlawful_object_section23',
+            keywords: JSON.stringify([
+                'illegal purpose', 'unlawful', 'circumvent law', 'evade tax',
+                'fraudulent activity', 'against public policy', 'immoral purpose',
+                'prohibited by law', 'defeat provisions of law'
+            ]),
+            risk_level: 'CRITICAL',
+            risk_score: 40,
+            linked_section: 'Section 23',
+            description: 'Contract with illegal or immoral object is void',
+            example_violation: '"Services include structuring transactions to avoid tax compliance"'
+        },
+
+        // ===== HIGH RISK =====
+        {
+            clause_type: 'unlimited_liability_section73',
+            keywords: JSON.stringify([
+                'unlimited liability', 'all damages', 'consequential damages',
+                'indirect damages', 'loss of profits', 'liable for all losses',
+                'no limit on liability', 'without limitation', 'any and all damages'
+            ]),
+            risk_level: 'HIGH',
+            risk_score: 25,
+            linked_section: 'Section 73',
+            description: 'Freelancer liable for unlimited damages without reasonable cap',
+            example_violation: '"Contractor shall be liable for all direct, indirect, and consequential damages without limit"'
+        },
+        {
+            clause_type: 'blanket_ip_transfer',
+            keywords: JSON.stringify([
+                'all intellectual property', 'IP rights', 'assign all rights',
+                'work for hire', 'waive moral rights', 'ownership of all work',
+                'copyright assignment', 'inventions belong to', 'transfer all IP'
+            ]),
+            risk_level: 'HIGH',
+            risk_score: 25,
+            linked_section: 'Section 10',
+            description: 'Transfers all IP rights without scope limitation or compensation',
+            example_violation: '"All intellectual property created during the term, whether related to the project or not, belongs to Client"'
+        },
+        {
+            clause_type: 'excessive_penalty_section74',
+            keywords: JSON.stringify([
+                'penalty of', 'liquidated damages of', 'shall pay', 'penalty equal to',
+                'penalty fee of', 'damages clause', 'breach penalty', 'forfeit'
+            ]),
+            risk_level: 'HIGH',
+            risk_score: 20,
+            linked_section: 'Section 74',
+            description: 'Excessive penalty that exceeds reasonable compensation for breach',
+            example_violation: '"Contractor shall pay penalty of 10x project value for any breach"'
+        },
+
+        // ===== MEDIUM RISK =====
+        {
+            clause_type: 'unilateral_termination',
+            keywords: JSON.stringify([
+                'terminate at will', 'without cause', 'immediate termination',
+                'terminate without notice', 'at sole discretion', 'cancel anytime',
+                'terminate for convenience'
+            ]),
+            risk_level: 'MEDIUM',
+            risk_score: 15,
+            linked_section: 'Section 10',
+            description: 'Client can terminate without reason or notice period',
+            example_violation: '"Client may terminate this agreement at any time without cause or notice"'
+        },
+        {
+            clause_type: 'unfair_payment_terms',
+            keywords: JSON.stringify([
+                'payment within 90 days', 'net 120', 'payment upon client receipt',
+                'withhold payment', 'deduct from payment', 'payment subject to',
+                'pay when client gets paid'
+            ]),
+            risk_level: 'MEDIUM',
+            risk_score: 18,
+            linked_section: 'Section 73',
+            description: 'Unreasonably delayed or conditional payment terms',
+            example_violation: '"Payment shall be made within 120 days of invoice, subject to client receiving payment from end customer"'
+        },
+        {
+            clause_type: 'foreign_jurisdiction',
+            keywords: JSON.stringify([
+                'governed by laws of', 'jurisdiction of', 'courts of USA',
+                'UK jurisdiction', 'Singapore courts', 'arbitration in',
+                'New York law', 'California law', 'Delaware courts'
+            ]),
+            risk_level: 'MEDIUM',
+            risk_score: 12,
+            linked_section: 'Section 10',
+            description: 'Disputes must be resolved in foreign jurisdiction (expensive for freelancer)',
+            example_violation: '"This agreement shall be governed by the laws of Delaware, USA"'
+        },
+        {
+            clause_type: 'undue_influence_section16',
+            keywords: JSON.stringify([
+                'must sign immediately', 'no time to review', 'take it or leave it',
+                'cannot consult lawyer', 'confidential - do not share', 'non-negotiable',
+                'sign now or lose opportunity'
+            ]),
+            risk_level: 'MEDIUM',
+            risk_score: 20,
+            linked_section: 'Section 16',
+            description: 'Pressure tactics or coercion to sign without review',
+            example_violation: '"This offer expires in 24 hours and terms are non-negotiable"'
+        },
+
+        // ===== LOW RISK =====
+        {
+            clause_type: 'vague_scope',
+            keywords: JSON.stringify([
+                'as required', 'additional work', 'reasonable efforts',
+                'scope may change', 'at client discretion', 'other duties',
+                'similar tasks', 'as needed'
+            ]),
+            risk_level: 'LOW',
+            risk_score: 5,
+            linked_section: 'Section 10',
+            description: 'Work scope not clearly defined, leading to scope creep',
+            example_violation: '"Contractor shall perform services as required by Client from time to time"'
+        }
+    ];
+
+    const insert = db.prepare(`
+    INSERT OR IGNORE INTO clause_patterns 
+    (clause_type, keywords, risk_level, risk_score, linked_section, description, example_violation)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `);
+
+    for (const pattern of patterns) {
+        insert.run(
+            pattern.clause_type,
+            pattern.keywords,
+            pattern.risk_level,
+            pattern.risk_score,
+            pattern.linked_section,
+            pattern.description,
+            pattern.example_violation
+        );
+    }
+
+    console.log(`✅ Seeded ${patterns.length} clause patterns`);
+}
+
+function seedFairContractBaseline() {
+    const baselines = [
+        {
+            clause_category: 'payment_terms',
+            fair_standard: 'Net 30 days',
+            acceptable_range: '15-45 days',
+            red_flag_threshold: 'Beyond 60 days',
+            explanation: 'Standard Indian practice is Net 30. Anything beyond 60 days is unfair.'
+        },
+        {
+            clause_category: 'termination_notice',
+            fair_standard: '15-30 days written notice',
+            acceptable_range: '7-30 days',
+            red_flag_threshold: 'Immediate termination without cause',
+            explanation: 'Both parties should have reasonable notice period.'
+        },
+        {
+            clause_category: 'liability_cap',
+            fair_standard: 'Capped at contract value',
+            acceptable_range: 'Contract value to 2x contract value',
+            red_flag_threshold: 'Unlimited liability',
+            explanation: 'Freelancer liability should be proportional to project value.'
+        },
+        {
+            clause_category: 'ip_rights',
+            fair_standard: 'Client owns deliverables, freelancer retains portfolio rights',
+            acceptable_range: 'Client owns work product, freelancer can showcase',
+            red_flag_threshold: 'All IP including pre-existing work',
+            explanation: 'Freelancer should retain rights to prior work and portfolio use.'
+        },
+        {
+            clause_category: 'non_compete',
+            fair_standard: 'None (Section 27 makes them void)',
+            acceptable_range: 'Project-specific confidentiality only',
+            red_flag_threshold: 'Any broad non-compete',
+            explanation: 'Non-compete clauses are generally unenforceable in India per Section 27.'
+        },
+        {
+            clause_category: 'jurisdiction',
+            fair_standard: 'Indian courts in freelancer\'s city',
+            acceptable_range: 'Indian courts (any major city)',
+            red_flag_threshold: 'Foreign jurisdiction',
+            explanation: 'Disputes should be resolved in India for cost reasons.'
+        }
+    ];
+
+    const insert = db.prepare(`
+    INSERT OR IGNORE INTO fair_contract_baseline 
+    (clause_category, fair_standard, acceptable_range, red_flag_threshold, explanation)
+    VALUES (?, ?, ?, ?, ?)
+  `);
+
+    for (const baseline of baselines) {
+        insert.run(
+            baseline.clause_category,
+            baseline.fair_standard,
+            baseline.acceptable_range,
+            baseline.red_flag_threshold,
+            baseline.explanation
+        );
+    }
+
+    console.log(`✅ Seeded ${baselines.length} fair contract baselines`);
+}
+
+function seedExplanationTemplates() {
+    const templates = [
+        {
+            clause_type: 'non_compete_section27',
+            base_explanation_en: 'This clause tries to prevent you from working with competitors or taking similar freelance projects.',
+            real_life_impact_en: 'Under Section 27 of the Indian Contract Act, 1872, such broad restrictions on your ability to earn a livelihood are VOID and cannot be enforced. You cannot be legally prevented from taking other freelance work in your field.',
+            gemini_prompt_hint: 'Emphasize that Section 27 makes most non-compete clauses void in India. This is DIFFERENT from US law where they may be enforceable. Explain freelancer can ignore this clause.'
+        },
+        {
+            clause_type: 'unlawful_object_section23',
+            base_explanation_en: 'This clause asks you to do something that is illegal or against public policy.',
+            real_life_impact_en: 'Under Section 23 of the Indian Contract Act, any contract with an unlawful object is COMPLETELY VOID from the beginning (void ab initio). This means the entire contract is unenforceable, and you should not sign it.',
+            gemini_prompt_hint: 'Emphasize the entire contract is void, not just this clause. Warn freelancer to walk away.'
+        },
+        {
+            clause_type: 'unlimited_liability_section73',
+            base_explanation_en: 'This clause makes you liable for all damages without any upper limit.',
+            real_life_impact_en: 'If something goes wrong (even beyond your control), you could be forced to pay unlimited amounts. Indian Contract Act Section 73 allows only "reasonable" compensation. This clause may be challenged as unconscionable.',
+            gemini_prompt_hint: 'Explain that liability should be capped at contract value or a reasonable amount. Unlimited liability is extremely risky.'
+        },
+        {
+            clause_type: 'excessive_penalty_section74',
+            base_explanation_en: 'This clause imposes a very high penalty for breach of contract.',
+            real_life_impact_en: 'Under Section 74, you can only be required to pay "reasonable compensation" for actual losses, not punitive penalties. If the penalty is excessive, Indian courts will reduce it.',
+            gemini_prompt_hint: 'Explain that courts will not enforce excessive penalties under Section 74. Freelancer should negotiate a reasonable cap.'
+        }
+    ];
+
+    const insert = db.prepare(`
+    INSERT OR IGNORE INTO explanation_templates 
+    (clause_type, base_explanation_en, real_life_impact_en, gemini_prompt_hint)
+    VALUES (?, ?, ?, ?)
+  `);
+
+    for (const template of templates) {
+        insert.run(
+            template.clause_type,
+            template.base_explanation_en,
+            template.real_life_impact_en,
+            template.gemini_prompt_hint
+        );
+    }
+
+    console.log(`✅ Seeded ${templates.length} explanation templates`);
+}
+
+// Run seed if called directly
+if (require.main === module) {
+    seedDatabase().catch(console.error);
+}

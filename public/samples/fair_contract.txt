@@ -1,0 +1,54 @@
+FREELANCE DEVELOPMENT AGREEMENT
+
+This Freelance Development Agreement ("Agreement") is entered into as of [Date] between:
+
+CLIENT: [Client Name]
+CONTRACTOR: [Contractor Name]
+
+1. SCOPE OF WORK
+
+The Contractor agrees to provide software development services as specified in Exhibit A (Statement of Work). Any changes to the scope must be agreed upon in writing by both parties.
+
+2. PAYMENT TERMS
+
+Client agrees to pay Contractor within 30 days of receiving a valid invoice. Payment terms are Net 30 days from invoice date. Late payments will incur interest at 1.5% per month.
+
+3. INTELLECTUAL PROPERTY
+
+Client owns all deliverables and work product created specifically for this project. Contractor retains ownership of pre-existing intellectual property and general methodologies. Contractor may showcase completed work in their portfolio after project completion.
+
+4. LIABILITY
+
+Contractor's liability is capped at the total contract value. Contractor is not liable for indirect, consequential, or punitive damages except in cases of gross negligence or willful misconduct.
+
+5. TERMINATION
+
+Either party may terminate this agreement with 15 days written notice. Upon termination, Client shall pay for all work completed up to the termination date.
+
+6. CONFIDENTIALITY
+
+Both parties agree to keep confidential information private during and for 2 years after the term of this agreement.
+
+7. GOVERNING LAW
+
+This agreement shall be governed by the laws of India. Any disputes shall be resolved in the courts of [City], India.
+
+8. INDEPENDENT CONTRACTOR
+
+Contractor is an independent contractor and not an employee of Client. Contractor is responsible for their own taxes and benefits.
+
+9. REVISIONS
+
+The scope includes up to 2 rounds of revisions. Additional revisions will be billed at the hourly rate specified in the Statement of Work.
+
+10. WARRANTIES
+
+Contractor warrants that deliverables will be free from major defects for 30 days after delivery. Client will have reasonable opportunity to review and report defects.
+
+AGREED AND ACCEPTED:
+
+CLIENT: _____________________
+DATE: ___________________
+
+CONTRACTOR: _____________________
+DATE: ___________________

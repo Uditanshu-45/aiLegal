@@ -1,0 +1,46 @@
+FREELANCE SERVICES AGREEMENT
+
+This Agreement is entered into on this date between the Client and the Contractor.
+
+1. NON-COMPETE CLAUSE
+
+The Contractor agrees not to engage in any competing business or provide similar services to any other client in the software industry for a period of 3 years after termination of this agreement. The Contractor shall not solicit or work with any competitor of the Client during or after the term of this agreement.
+
+2. LIABILITY AND INDEMNIFICATION
+
+Contractor shall be liable for all direct, indirect, consequential, incidental, special, and punitive damages arising from any breach or performance of services, without limitation. The Contractor agrees to indemnify and hold harmless the Client from any and all losses, damages, and expenses, including legal fees, without any cap on liability.
+
+3. INTELLECTUAL PROPERTY RIGHTS
+
+All intellectual property, including but not limited to ideas, concepts, inventions, work product, and any materials created by Contractor during the term of this agreement, whether related to this project or not, shall be the sole and exclusive property of Client. Contractor hereby waives all moral rights and agrees to transfer all IP rights to Client immediately upon creation.
+
+4. PAYMENT TERMS
+
+Payment shall be made within 120 days of invoice submission, subject to Client receiving payment from their end customer. Client reserves the right to withhold payment if deliverables do not meet Client's sole discretion and satisfaction. Payment may be deducted for any perceived quality issues.
+
+5. TERMINATION
+
+Client may terminate this agreement immediately without cause or notice at their sole discretion. Upon termination, Contractor forfeits all unpaid amounts and must return all materials within 24 hours. The Contractor cannot terminate this agreement.
+
+6. GOVERNING LAW AND JURISDICTION
+
+This agreement shall be governed by the laws of Delaware, United States of America. All disputes arising from this agreement shall be resolved exclusively in the courts of Delaware, USA. Contractor agrees to submit to the jurisdiction of Delaware courts.
+
+7. PENALTY CLAUSE
+
+In the event of any breach by Contractor, including but not limited to late delivery or quality issues, Contractor shall pay liquidated damages equal to 10 times the total contract value. This penalty is in addition to any other remedies available to Client.
+
+8. SCOPE OF WORK
+
+Contractor shall perform services as required by Client from time to time. The scope may change at Client's discretion, and Contractor agrees to perform additional work as needed without additional compensation. Client may assign duties and responsibilities as deemed necessary.
+
+9. CONFIDENTIALITY
+
+This agreement and its terms are confidential. Contractor shall not consult a lawyer or share this agreement with any third party. Contractor must sign immediately as this offer expires in 24 hours and terms are non-negotiable.
+
+10. REPRESENTATIONS AND WARRANTIES
+
+Contractor represents that they have no other commitments and will dedicate 100% of their time to this project. Any deviation from full-time dedication constitutes breach of contract.
+
+CONTRACTOR SIGNATURE: ___________________
+DATE: ___________________

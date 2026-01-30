@@ -1,0 +1,72 @@
+FAIR FREELANCE CONTRACT BASELINE (India)
+
+This document outlines what a fair freelance contract should contain according to standard Indian industry practices and legal norms.
+
+1. PAYMENT TERMS
+- Standard: Net 30 days from invoice date
+- Acceptable: 15-45 days
+- Red Flag: Beyond 60 days or conditional payment ("when client gets paid")
+- Why: Freelancers need predictable cash flow. Extended payment terms create financial hardship.
+
+2. TERMINATION NOTICE
+- Standard: 15-30 days written notice by either party
+- Acceptable: 7-30 days mutual notice
+- Red Flag: Immediate termination by client without cause, or contractor cannot terminate
+- Why: Both parties need time to transition. One-sided termination rights are unfair.
+
+3. LIABILITY CAP
+- Standard: Capped at contract value
+- Acceptable: Contract value to 2x contract value
+- Red Flag: Unlimited liability or consequential damages
+- Why: Liability should be proportional to compensation. Unlimited liability is unreasonable risk.
+
+4. INTELLECTUAL PROPERTY RIGHTS
+- Standard: Client owns deliverables, freelancer retains portfolio rights
+- Acceptable: Client owns work product, freelancer can showcase with permission
+- Red Flag: All IP including pre-existing work, or perpetual non-compete
+- Why: Freelancers should retain their tools, methods, and ability to show their work.
+
+5. NON-COMPETE RESTRICTIONS
+- Standard: None (Section 27 of Indian Contract Act makes broad non-competes void)
+- Acceptable: Project-specific confidentiality for reasonable duration
+- Red Flag: Cannot work in same industry, cannot work with competitors
+- Why: Section 27 of Indian Contract Act, 1872 states that agreements in restraint of trade are void.
+
+6. JURISDICTION
+- Standard: Indian courts in freelancer's city or mutually agreed city
+- Acceptable: Any major Indian city with good court infrastructure
+- Red Flag: Foreign jurisdiction (USA, UK, Singapore, etc.)
+- Why: Resolving disputes in foreign courts is prohibitively expensive for Indian freelancers.
+
+7. SCOPE CLARITY
+- Standard: Clearly defined deliverables, milestones, and revision limits
+- Acceptable: Defined scope with reasonable change request process
+- Red Flag: "As needed", "at client discretion", unlimited revisions
+- Why: Vague scope leads to scope creep and unpaid work.
+
+8. WORK HOURS AND AVAILABILITY
+- Standard: Project-based or defined hours per week
+- Acceptable: Flexible schedule respecting freelancer's independence
+- Red Flag: Must be available 24/7, cannot take other clients
+- Why: Freelancers are independent contractors, not employees.
+
+9. INDEMNIFICATION
+- Standard: Mutual indemnification for respective breaches
+- Acceptable: Contractor indemnifies for IP infringement of their work
+- Red Flag: One-sided indemnification for all possible claims
+- Why: Risk should be shared fairly based on who is responsible.
+
+10. WARRANTIES
+- Standard: Work will be completed professionally and free of major defects
+- Acceptable: 30-90 day warranty period for bug fixes
+- Red Flag: Perpetual warranty or warranty for third-party components
+- Why: Reasonable warranty protects both parties without undue burden.
+
+REFERENCES:
+- Indian Contract Act, 1872: https://www.indiacode.nic.in/
+- Section 27: Agreements in restraint of trade are void
+- Section 23: Contracts with unlawful objects are void
+- Section 73: Compensation for breach must be reasonable
+- Section 74: Penalty clauses must not be excessive
+
+Last Updated: January 2024
