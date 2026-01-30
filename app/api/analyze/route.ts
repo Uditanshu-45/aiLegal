@@ -5,7 +5,6 @@ import { validateAgainstIndianLaw } from '@/lib/services/indianLawValidator.serv
 import { checkDeviationsFromFairContract } from '@/lib/services/deviationChecker.service';
 import { calculateRiskScore, getRiskLevel } from '@/lib/services/scorer.service';
 import { explainClause } from '@/lib/services/explainer.service';
-import { cleanupFile } from '@/lib/utils/fileCleanup';
 import { ALLOWED_FILE_TYPES, MAX_FILE_SIZE, DISCLAIMER } from '@/lib/utils/constants';
 
 export async function POST(request: NextRequest) {
@@ -56,20 +55,53 @@ export async function POST(request: NextRequest) {
 
         // 8. Generate ELI5 explanations using Gemini (IN PARALLEL for speed)
         const explainedViolations = await Promise.all(
-            violations.map(async (violation) => {
-                const { simpleExplanation, realLifeImpact } = await explainClause(
-                    violation.clauseText,
-                    violation.violationType,
-                    violation.sectionFullText,
-                    language as 'en' | 'hi'
-                );
+            violations.map(async (violation, index) => {
+                let simpleExplanation = '';
+                let realLifeImpact = '';
+
+                try {
+                    const explained = await explainClause(
+                        violation.clauseText,
+                        violation.violationType,
+                        violation.sectionFullText,
+                        language as 'en' | 'hi'
+                    );
+                    simpleExplanation = explained.simpleExplanation;
+                    realLifeImpact = explained.realLifeImpact;
+                } catch (err) {
+                    console.warn('Gemini explanation failed, using fallback:', err);
+                    simpleExplanation = violation.explanation;
+                    realLifeImpact = 'This clause may put you at a significant disadvantage. Consider negotiating better terms.';
+                }
+
+                // Find position of this clause in original text
+                const clauseTextLower = violation.clauseText.toLowerCase();
+                const textLower = text.toLowerCase();
+                let startIndex = textLower.indexOf(clauseTextLower);
+
+                // If exact match fails, try to find a substring match
+                if (startIndex === -1) {
+                    // Try first 50 chars of clause
+                    const searchText = clauseTextLower.substring(0, 50);
+                    startIndex = textLower.indexOf(searchText);
+                }
+
+                // If still not found, estimate based on clause order
+                if (startIndex === -1) {
+                    startIndex = Math.floor((index / Math.max(violations.length, 1)) * text.length);
+                }
+
+                const endIndex = startIndex >= 0 ? startIndex + violation.clauseText.length : startIndex + 100;
 
                 return {
+                    id: index + 1,
                     clauseNumber: violation.clauseId,
                     originalText: violation.clauseText,
                     violationType: violation.violationType,
                     riskLevel: violation.riskLevel,
                     riskScore: violation.riskScore,
+                    startIndex: Math.max(0, startIndex),
+                    endIndex: Math.min(text.length, endIndex),
                     indianLawReference: {
                         section: violation.sectionNumber,
                         title: violation.sectionTitle,
@@ -87,7 +119,7 @@ export async function POST(request: NextRequest) {
             })
         );
 
-        // 9. Format response
+        // 9. Format response with extracted text for contract viewer
         const response = {
             success: true,
             processingTimeMs: Date.now() - startTime,
@@ -96,7 +128,8 @@ export async function POST(request: NextRequest) {
                 fileSize: file.size,
                 fileType: file.type,
                 extractedCharacters: metadata.characterCount,
-                pageCount: metadata.pageCount
+                pageCount: metadata.pageCount,
+                extractedText: text  // Full text for contract viewer
             },
             analysis: {
                 overallRiskScore: riskScore,
@@ -111,7 +144,7 @@ export async function POST(request: NextRequest) {
                     LOW: violations.filter(v => v.riskLevel === 'LOW').length
                 }
             },
-            riskyClauses: explainedViolations,
+            riskyClauses: explainedViolations,  // Now includes startIndex, endIndex
             deviations: deviations,
             disclaimer: DISCLAIMER
         };
