@@ -10,6 +10,7 @@ import { Separator } from '@/components/ui/separator';
 import SplitScreenLayout from '@/components/layout/SplitScreenLayout';
 import ContractViewer from '@/components/contract/ContractViewer';
 import AnalysisPanel from '@/components/analysis/AnalysisPanel';
+import EmailDialog from '@/components/email/EmailDialog';
 
 const STORAGE_KEY = 'andhakanoon_analysis_result';
 
@@ -161,10 +162,13 @@ export default function ResultPage() {
                         </div>
                     </div>
 
-                    {/* Right: New Analysis */}
-                    <Button size="sm" onClick={handleNewAnalysis}>
-                        New Analysis
-                    </Button>
+                    {/* Right: Actions */}
+                    <div className="flex items-center gap-3">
+                        <EmailDialog results={results} />
+                        <Button size="sm" onClick={handleNewAnalysis}>
+                            New Analysis
+                        </Button>
+                    </div>
                 </div>
             </header>
 

@@ -29,7 +29,7 @@ export default function Navbar() {
                         अ
                     </div>
                     <span className="font-heading font-bold text-xl tracking-tight text-foreground">
-                        Andhakanoon
+                        Andha Kanoon
                     </span>
                 </Link>
 

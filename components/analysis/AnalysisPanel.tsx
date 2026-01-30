@@ -114,7 +114,7 @@ export default function AnalysisPanel({ overallScore, riskLevel, breakdown, viol
                     </div>
                     <div className="space-y-3">
                         {violations.map((violation) => (
-                            <div key={violation.id} ref={(el) => { if (el) violationRefs.current[violation.id] = el; }}>
+                            <div key={violation.clauseNumber} ref={(el) => { if (el) violationRefs.current[violation.clauseNumber] = el; }}>
                                 <ViolationCard
                                     violation={violation}
                                     onJumpToClause={() => onJumpToClause(violation.clauseNumber)}
