@@ -113,43 +113,97 @@ async function generateWithoutTemplate(
     company: { simpleExplanation: string; realLifeImpact: string; };
 }> {
     const prompt = `
-Explain this contract clause from TWO perspectives in ${language === 'hi' ? 'Hindi' : 'English'}:
+You are a legal expert explaining contract clauses.
 
-CLAUSE: "${clauseText}"
-INDIAN LAW CONTEXT: ${indianLawSection}
+CONTEXT: Indian Contract Act, 1872 applies.
 
-Return JSON with explanations for both FREELANCER and COMPANY:
+CLAUSE: "${clauseText.substring(0, 400)}"
+INDIAN LAW: ${indianLawSection.substring(0, 300)}
+
+Return ONLY valid JSON (no markdown, no code blocks):
 {
   "freelancer": {
     "simpleExplanation": "2-3 sentences from worker's perspective",
-    "realLifeImpact": "Impact on their income/career"
+    "realLifeImpact": "Specific impact on their income/career"
   },
   "company": {
-    "simpleExplanation": "2-3 sentences from employer's perspective",
-    "realLifeImpact": "Impact on business/legal risk"
+    "simpleExplanation": "2-3 sentences from employer's perspective", 
+    "realLifeImpact": "Specific business/legal risk"
   }
 }
 `;
 
     try {
+        console.log(`[GEMINI] 🤖 Calling Gemini for clause explanation...`);
         const result = await model.generateContent(prompt);
         const text = result.response.text();
+        console.log(`[GEMINI] 📝 Response received (${text.length} chars)`);
+
         const jsonMatch = text.match(/\{[\s\S]*\}/);
 
         if (!jsonMatch) {
-            throw new Error('Invalid response');
+            console.warn(`[GEMINI] ⚠️ No JSON found in response`);
+            throw new Error('No JSON in response');
         }
 
-        return JSON.parse(jsonMatch[0]);
-    } catch (error) {
+        const parsed = JSON.parse(jsonMatch[0]);
+        console.log(`[GEMINI] ✅ Successfully parsed explanation`);
+        return parsed;
+
+    } catch (error: any) {
+        console.error(`[GEMINI] ❌ Error: ${error.message}`);
+
+        // Return clause-type-specific fallback based on clause content
+        const clauseLower = clauseText.toLowerCase();
+
+        if (clauseLower.includes('compete') || clauseLower.includes('competitor')) {
+            return {
+                freelancer: {
+                    simpleExplanation: 'This non-compete clause tries to stop you from working with competitors. Under Section 27 of Indian Contract Act, such restrictions are generally VOID.',
+                    realLifeImpact: 'Good news: You can likely work wherever you want after leaving. This clause is unenforceable in India.'
+                },
+                company: {
+                    simpleExplanation: 'This non-compete clause is void under Section 27 of Indian Contract Act 1872.',
+                    realLifeImpact: 'You cannot legally prevent employees from joining competitors in India.'
+                }
+            };
+        }
+
+        if (clauseLower.includes('intellectual property') || clauseLower.includes('invention') || clauseLower.includes(' ip ')) {
+            return {
+                freelancer: {
+                    simpleExplanation: 'This clause affects ownership of work you create. It may claim rights over your personal projects too.',
+                    realLifeImpact: 'Your side projects might belong to the company if this clause is too broad.'
+                },
+                company: {
+                    simpleExplanation: 'This IP assignment clause may be overly broad and face challenges.',
+                    realLifeImpact: 'Overly aggressive IP clauses can deter talent and create legal disputes.'
+                }
+            };
+        }
+
+        if (clauseLower.includes('termination') || clauseLower.includes('notice period')) {
+            return {
+                freelancer: {
+                    simpleExplanation: 'This termination clause may allow the company to end your contract with limited notice.',
+                    realLifeImpact: 'You may have less job security than expected. Check for mutual termination rights.'
+                },
+                company: {
+                    simpleExplanation: 'This termination clause should comply with applicable labor laws.',
+                    realLifeImpact: 'Improper termination procedures can lead to wrongful termination claims.'
+                }
+            };
+        }
+
+        // Generic fallback
         return {
             freelancer: {
-                simpleExplanation: 'This clause may be risky. Review carefully.',
-                realLifeImpact: 'Could affect your ability to work freely.'
+                simpleExplanation: 'This clause may affect your rights. Review it carefully before signing.',
+                realLifeImpact: 'Consider negotiating or seeking legal advice on unfavorable terms.'
             },
             company: {
-                simpleExplanation: 'This clause may have enforceability issues.',
-                realLifeImpact: 'Consider legal review before relying on this provision.'
+                simpleExplanation: 'This clause may have enforceability issues under Indian law.',
+                realLifeImpact: 'Consult legal counsel to ensure compliance and enforceability.'
             }
         };
     }
