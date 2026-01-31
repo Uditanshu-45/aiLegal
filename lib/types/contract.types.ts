@@ -102,3 +102,14 @@ export interface CombinedViolation {
     govUrl: string;
 }
 
+/**
+ * Contract context for context-aware scoring
+ */
+export interface ContractContext {
+    contractType: 'freelance' | 'employment' | 'vendor' | 'consultant' | 'general';
+    industry: 'software' | 'design' | 'writing' | 'video' | 'marketing' | 'general';
+    contractValue?: number;      // In INR
+    durationMonths?: number;
+    userExperience?: number;     // Years
+}
+
